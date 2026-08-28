@@ -1,4 +1,5 @@
 .vscode/
+.venv/
 *.msh
 *.vtu
 *.png

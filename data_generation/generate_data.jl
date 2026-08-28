@@ -51,8 +51,10 @@ a_1 = -c_1 / (2 * k^2)
 u_lap_vec = u_special_vec + a_1 * ϕ[:, 1]
 
 # Compute perturbed solutions on the same mesh.
-epsilons = [1e-1, 5e-2, 2e-2, 1e-2, 5e-3, 2e-3, 1e-3]
+n = 100
+epsilons = collect(10.0 .^ range(-1, -3; length=n))
 relative_errors = Float64[]
+ratios = Float64[]
 
 lap_norm = sqrt(real(dot(u_lap_vec, M * u_lap_vec)))
 
@@ -64,15 +66,17 @@ for epsilon in epsilons
 
     difference = u_epsilon_vec - u_lap_vec
     relative_error = sqrt(real(dot(difference, M * difference))) / lap_norm
+    ratio = relative_error / epsilon
     push!(relative_errors, relative_error)
+    push!(ratios, ratio)
 end
 
 # Save only epsilon and relative error.
 output_path = joinpath(@__DIR__, "ellipse_convergence.csv")
 open(output_path, "w") do io
-    println(io, "epsilon,relative_error")
-    for (epsilon, relative_error) in zip(epsilons, relative_errors)
-        @printf(io, "%.16e,%.16e\n", epsilon, relative_error)
+    println(io, "epsilon,relative_error,ratio")
+    for (epsilon, relative_error, ratio) in zip(epsilons, relative_errors, ratios)
+        @printf(io, "%.16e,%.16e,%.16e\n", epsilon, relative_error, ratio)
     end
 end
 
