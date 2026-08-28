@@ -13,19 +13,30 @@ data_path = (
 
 output_path = script_directory / "data.xlsx"
 
+#transfer data from csv to panda dataframe
 data_file = pd.read_csv(data_path)
 
-data_file.head(8)
-data_file.tail(10)
+#information of the data file
 data_file.dtypes
 data_file.info()
-print(data_file.describe())
+summary = data_file.describe()
+summary.to_csv(
+    script_directory 
+    / "summary.csv",
+    index=True
+)
 
+#transfer data from panda dataframe to excel file
 data_file.to_excel(
     output_path,
     sheet_name="data",
     index=False
 )
 
+duplicate_mask = data_file.duplicated(
+    subset=["epsilon"],
+    keep=False
+)
 
+print(data_file[duplicate_mask])
 
