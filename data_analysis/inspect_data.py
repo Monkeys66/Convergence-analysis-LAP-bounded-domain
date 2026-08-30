@@ -33,10 +33,6 @@ data_file.to_excel(
     index=False
 )
 
-duplicate_mask = data_file.duplicated(
-    subset=["epsilon"],
-    keep=False
-)
 
-print(data_file[duplicate_mask])
+
 

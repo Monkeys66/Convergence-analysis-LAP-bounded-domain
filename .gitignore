@@ -4,3 +4,5 @@
 *.vtu
 *.png
 *.csv
+*.xlsx
+python_etl/check_connection.py
